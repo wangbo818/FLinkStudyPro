@@ -20,6 +20,9 @@ public class TransformFilterTest {
             }
         });
         filter.print();
+        SingleOutputStreamOperator<String> map = filter.map(data -> data.user);
+        map.print();
+
         env.execute();
 
     }

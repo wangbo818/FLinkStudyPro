@@ -10,11 +10,13 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import java.time.Duration;
 
 public class WatermarkTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         DataStreamSource<Event> dataStream = env.addSource(new ClickSource());
+
+        // 乱序流的watermark
         dataStream.assignTimestampsAndWatermarks(WatermarkStrategy.<Event>forBoundedOutOfOrderness(Duration.ofSeconds(2)).withTimestampAssigner(
 
                 new SerializableTimestampAssigner<Event>() {
@@ -22,8 +24,12 @@ public class WatermarkTest {
                     public long extractTimestamp(Event o, long l) {
                         return o.timestamp;
                     }
+
+
                 }
 
         ));
+
+        env.execute();
     }
 }
