@@ -18,8 +18,9 @@ public class SinkToKafka {
                 return event.user + "-" +event.timestamp;
             }
         });
+        map.print();
         map.addSink(new FlinkKafkaProducer<String>(
-                "192.168.1.141:19092","mytest",new SimpleStringSchema()
+                "localhost:19092","mytest",new SimpleStringSchema()
 
         ));
 
